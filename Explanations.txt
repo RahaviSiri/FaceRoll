@@ -1,0 +1,40 @@
+🧠 Python Face Recognition Setup (macOS)
+
+✅ Step 1: Create a Python Virtual Environment
+python3 -m venv venv
+This creates a folder named venv/ with an isolated Python environment.
+
+✅ Step 2: Activate the Virtual Environment
+source venv/bin/activate
+Once activated, your terminal will look like this:
+(venv) your-folder-name$
+
+✅ Step 3: Install Required Dependencies
+✅ Why install inside venv?
+Keeps dependencies isolated to this project
+Avoids conflicts with your system Python or other projects
+Makes it easy to export them later using:
+pip install flask face_recognition numpy opencv-python psycopg2-binary
+
+📦 What Each Package Does:
+Package	Purpose
+flask	Web server framework for creating REST APIs
+face_recognition	Core facial recognition engine
+numpy	Required for face encodings
+opencv-python	(Optional) For image I/O and visualization
+psycopg2-binary	Connects Python to your PostgreSQL database (if needed)
+
+✅ Step 4: Run Your Flask Server
+python app.py
+Or, if your script has a different filename:
+python your_script_name.py
+Make sure app.run(port=6001) is included to start the server.
+
+✅ Step 5: Deactivate When Done
+deactivate
+This exits the virtual environment and returns to your global Python context.
+
+
+What is Flask?
+Flask is a lightweight and easy-to-use web framework for Python. It helps you build web applications and APIs by providing tools and features to handle web requests, routes (URLs), and responses.
+
