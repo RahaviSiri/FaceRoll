@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Mark Attendance', path: '/mark-attendance' },
-    { name: 'Add Student', path: '/add-student' }
+    { name: 'Add Student', path: '/add-student' },
+    { name: 'Student Attendance', path: '/student-attendance' },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-black/80 text-white shadow-md">
@@ -33,7 +40,8 @@ const NavBar = () => {
           </button>
         </div>
 
-        <div className="hidden md:flex gap-6">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex gap-6 items-center">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -47,9 +55,16 @@ const NavBar = () => {
               {item.name}
             </NavLink>
           ))}
+          <button
+            onClick={handleLogout}
+            className="ml-4 px-3 py-1 bg-gray-600 rounded hover:bg-gray-700 text-white text-sm"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-4 pb-3 space-y-2">
           {navItems.map((item) => (
@@ -62,6 +77,15 @@ const NavBar = () => {
               {item.name}
             </NavLink>
           ))}
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              handleLogout();
+            }}
+            className="w-full text-left py-2 text-red-400 border-t border-white"
+          >
+            Logout
+          </button>
         </div>
       )}
     </nav>
