@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 
 const StudentAttendance = () => {
     const [attendanceData, setAttendanceData] = useState({});
     const [students, setStudents] = useState([]);
     const [dates, setDates] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAttendance = async () => {
@@ -14,7 +17,7 @@ const StudentAttendance = () => {
                 console.log(token);
                 const { data } = await axios.get('http://localhost:3000/api/teacher/get-class-name', {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}` 
                     }
                 });
 
@@ -88,6 +91,15 @@ const StudentAttendance = () => {
                     </tbody>
                 </table>
             </div>
+            {/* ✅ Button to download attendance */}
+            <button
+                onClick={() => navigate('/download-attendence')}
+                className="fixed bottom-4 right-4 bg-black hover:bg-black text-white p-3 rounded-full shadow-lg transition"
+                title="Download Attendance"
+            >
+                <ArrowDownTrayIcon className="w-5 h-5" />
+            </button>
+
         </div>
     );
 };

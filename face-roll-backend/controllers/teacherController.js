@@ -4,6 +4,7 @@ import FormData from "form-data";
 import pool from "../config/db.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { Parser } from 'json2csv'; // for CSV generation
 
 async function saveStudent(name, className, imageUrl, encoding) {
     // Convert encoding array (floats) to Buffer for BYTEA column in Postgres
@@ -203,7 +204,7 @@ const getClassName = async (req, res) => {
             return res.status(404).json({ message: "No class assigned" });
         }
 
-        return res.json({ className });
+        return res.json({ success:true ,className });
     } catch (error) {
         console.error("Error fetching class name:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -286,7 +287,7 @@ const signUpTeacher = async (req, res) => {
         // Generate JWT
         const token = jwt.sign({ userName }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
-        return res.status(201).json({ message: "Teacher registered successfully", token });
+        return res.status(201).json({success:true, token });
     } catch (error) {
         console.error("Error signing up teacher:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -318,11 +319,63 @@ const loginTeacher = async (req, res) => {
         // Create JWT token
         const token = jwt.sign({ userName }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
-        return res.status(200).json({ message: "Login successful", token });
+        return res.status(200).json({ success: true, token });
     } catch (error) {
         console.error("Error logging in teacher:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
 
-export { addStudent, markAttendance, getStudentAttendance, loginTeacher, signUpTeacher, getClassName };
+const downloadAttendanceSheet = async (req, res) => {
+    try {
+        const { className, date } = req.query;
+
+        if (!className || !date) {
+            return res.status(400).json({ message: "className and date are required" });
+        }
+
+        // Get class_id
+        const classResult = await pool.query(
+            "SELECT id FROM classes WHERE class_name = $1",
+            [className]
+        );
+
+        if (classResult.rows.length === 0) {
+            return res.status(404).json({ message: "Class not found" });
+        }
+
+        const classId = classResult.rows[0].id;
+
+        const result = await pool.query(
+            `
+            SELECT s.name AS student_name, ar.status
+            FROM attendance_records ar
+            JOIN students s ON ar.student_id = s.id
+            WHERE ar.class_id = $1 AND ar.date = $2
+            ORDER BY s.name ASC
+            `,
+            [classId, date]
+        );
+
+        const records = result.rows;
+
+        if (!records.length) {
+            return res.status(404).json({ message: "No attendance records found for that date" });
+        }
+
+        // Convert to CSV
+        const parser = new Parser({ fields: ['student_name', 'status'] });
+        const csv = parser.parse(records);
+        // This is using the json2csv package — a library that converts JSON data (JavaScript objects) into CSV (Comma-Separated Values) format.
+
+        res.header('Content-Type', 'text/csv');
+        res.attachment(`attendance_${className}_${date}.csv`);
+        return res.send(csv);
+
+    } catch (error) {
+        console.error("Error generating CSV:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export { addStudent, markAttendance, getStudentAttendance, loginTeacher, signUpTeacher, getClassName, downloadAttendanceSheet };

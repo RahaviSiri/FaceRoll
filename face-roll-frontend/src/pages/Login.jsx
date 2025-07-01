@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../context/appContext.jsx';
 
 const Login = () => {
     const [userName, setUserName] = useState("");
@@ -9,8 +10,9 @@ const Login = () => {
     const [isLogin, setIsLogin] = useState(true); // toggle login/signup
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
-    const [token, setToken] = useState(null);
     const navigate = useNavigate();
+    const { token, setToken } = useContext(AppContext);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,14 +27,21 @@ const Login = () => {
                 : "http://localhost:3000/api/teacher/sign-up";
 
             const { data } = await axios.post(url, payload);
-            localStorage.setItem("authToken", data.token);
-            setToken(data.token);
-            navigate('/');
-            setMessage(data.message || "Success!");
-            setMessageType("success");
-            setUserName("");
-            setPassword("");
-            setClassName("");
+            if (data.token) {
+                localStorage.setItem("authToken", data.token);
+                setToken(data.token); 
+                navigate("/");
+                setMessage(data.message || "Success!");
+                setMessageType("success");
+                setUserName("");
+                setPassword("");
+                setClassName("");
+            }else{
+                setMessage(data.message || "Something went wrong.");
+                setMessageType("error");
+                setTimeout(() => setMessage(""), 3000);
+                return;
+            }
             // Clear message after 3 seconds
             setTimeout(() => setMessage(""), 3000);
         } catch (err) {
