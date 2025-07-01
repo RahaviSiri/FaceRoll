@@ -1,14 +1,16 @@
-import React from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
-import NavBar from './components/NavBar'
-import Home from './pages/Home'
-import MarkAttendence from './pages/MarkAttendence'
-import AddStudent from './pages/AddStudent'
-import StudentAttendence from './pages/StudentAttendence'
-import Login from './pages/Login' 
+import React, { useContext } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import Home from './pages/Home';
+import MarkAttendence from './pages/MarkAttendence';
+import AddStudent from './pages/AddStudent';
+import StudentAttendence from './pages/StudentAttendence';
+import Login from './pages/Login';
+import DownloadAttendance from './pages/DownloadPdf';
+import { AppContext } from './context/appContext.jsx';
 
 const App = () => {
-  const token = localStorage.getItem("authToken");
+  const { token } = useContext(AppContext);
 
   return (
     token ? (
@@ -20,14 +22,14 @@ const App = () => {
             <Route path="/mark-attendance" element={<MarkAttendence />} />
             <Route path="/add-student" element={<AddStudent />} />
             <Route path="/student-attendance" element={<StudentAttendence />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/download-attendence" element={<DownloadAttendance />} />
           </Routes>
         </main>
       </div>
     ) : (
       <Login />
     )
-  )
-}
+  );
+};
 
 export default App;

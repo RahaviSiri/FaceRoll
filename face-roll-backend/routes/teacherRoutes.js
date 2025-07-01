@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   addStudent,
+  downloadAttendanceSheet,
   getClassName,
   getStudentAttendance,
   loginTeacher,
@@ -19,5 +20,6 @@ teacherRouter.get('/get-class-name', authTeacher, getClassName);
 teacherRouter.post('/get-student-attendance', getStudentAttendance);
 teacherRouter.post('/sign-up', signUpTeacher);
 teacherRouter.post('/login', loginTeacher);
+teacherRouter.get('/download-attendance', authTeacher, downloadAttendanceSheet);
 
 export default teacherRouter;

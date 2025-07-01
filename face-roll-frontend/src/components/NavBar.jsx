@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { AppContext } from '../context/appContext.jsx';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { token,setToken } = useContext(AppContext);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -12,9 +14,15 @@ const NavBar = () => {
     { name: 'Student Attendance', path: '/student-attendance' },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    navigate('/login');
+  const handleLogout = (e) => {
+    e.preventDefault();
+    try {
+      localStorage.removeItem("authToken");
+      setToken(null);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
