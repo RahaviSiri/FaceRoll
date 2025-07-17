@@ -121,5 +121,9 @@ def decode():
     # Many faces, possibly low quality, slight angle differences
     # Use tolerance = 0.45 or 0.5 for: Fewer false positives (don’t mark the wrong student as present) Still tolerant of natural variations
     
-if __name__ == '__main__':
-    app.run(port=6001)
+if __name__ == "__main__":
+    from dotenv import load_dotenv
+    load_dotenv()
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+# if __name__ == '__main__':
+#     app.run(port=6001)
