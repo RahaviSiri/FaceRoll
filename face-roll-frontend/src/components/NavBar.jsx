@@ -95,7 +95,7 @@ const NavBar = () => {
             Logout
           </button>
         </div>
-      )}
+      )} 
     </nav>
   );
 };

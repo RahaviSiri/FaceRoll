@@ -25,7 +25,7 @@ const AddStudent = () => {
 
     try {
       const { data } = await axios.post(
-        'http://localhost:3000/api/teacher/add-student',
+        `${import.meta.env.VITE_API_URL}/api/teacher/add-student`,
         formData,
         {
           headers: {

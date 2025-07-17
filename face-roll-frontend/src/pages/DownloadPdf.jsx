@@ -13,7 +13,7 @@ const DownloadAttendance = () => {
         e.preventDefault();
         try {
             const { data } = await axios.get(
-                "http://localhost:3000/api/teacher/get-class-name",
+                `${import.meta.env.VITE_API_URL}/api/teacher/get-class-name`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -25,7 +25,7 @@ const DownloadAttendance = () => {
                 const className = data.className;
 
                 const response = await axios.get(
-                    `http://localhost:3000/api/teacher/download-attendance?className=${className}&date=${date}`,
+                    `${import.meta.env.VITE_API_URL}/api/teacher/download-attendance?className=${className}&date=${date}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

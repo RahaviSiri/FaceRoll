@@ -15,13 +15,13 @@ const StudentAttendance = () => {
             try {
                 const token = localStorage.getItem("authToken");
                 console.log(token);
-                const { data } = await axios.get('http://localhost:3000/api/teacher/get-class-name', {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/teacher/get-class-name`, {
                     headers: {
                         Authorization: `Bearer ${token}` 
                     }
                 });
 
-                const attendanceResponse = await axios.post('http://localhost:3000/api/teacher/get-student-attendance', {
+                const attendanceResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/teacher/get-student-attendance`, {
                     className: data.className
                 });
                 const attendanceData = attendanceResponse.data;

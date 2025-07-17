@@ -23,7 +23,7 @@ const MarkAttendance = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/teacher/mark-attendance",
+        `${import.meta.env.VITE_API_URL}/api/teacher/mark-attendance`,
         formData,
         {
           headers: {
