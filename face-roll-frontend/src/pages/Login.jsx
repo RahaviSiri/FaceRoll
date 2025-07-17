@@ -23,8 +23,8 @@ const Login = () => {
                 : { userName, password, className };
 
             const url = isLogin
-                ? "http://localhost:3000/api/teacher/login"
-                : "http://localhost:3000/api/teacher/sign-up";
+                ? `${import.meta.env.VITE_API_URL}/api/teacher/login`
+                : `${import.meta.env.VITE_API_URL}/api/teacher/sign-up`;
 
             const { data } = await axios.post(url, payload);
             if (data.token) {
