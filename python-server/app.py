@@ -4,17 +4,20 @@ import face_recognition
 import numpy as np
 # Flask, request, and jsonify from the flask package are used to create the web server, handle incoming requests, and send JSON responses.
 # face_recognition is used for encoding faces, and numpy is used for handling numerical data.
+from dotenv import load_dotenv
+import os
 
+load_dotenv()  # Load environment variables from .env file
 app = Flask(__name__)
 # app = Flask(__name__) creates a new Flask web application instance.
 # This instance will handle incoming requests and route them to the appropriate functions.
 
 # Connect to PostgreSQL (adjust credentials as needed)
 conn = psycopg2.connect(
-    host="localhost",
-    user= "postgres",
-    password= "Ravi12345",
-    database="postgres",
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
     options="-c search_path=public"
 )
 cursor = conn.cursor()
