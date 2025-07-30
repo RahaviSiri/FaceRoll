@@ -14,7 +14,7 @@ Once activated, your terminal will look like this:
 Keeps dependencies isolated to this project
 Avoids conflicts with your system Python or other projects
 Makes it easy to export them later using:
-pip install flask face_recognition numpy opencv-python psycopg2-binary
+pip install setuptools flask face_recognition numpy opencv-python psycopg2-binary
 
 📦 What Each Package Does:
 Package	Purpose
